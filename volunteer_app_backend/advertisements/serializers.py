@@ -45,3 +45,20 @@ class AdvertisementCreateSerializer(serializers.Serializer):
             ])
 
         return advertisement
+
+
+class AdvertisementListSerializer(serializers.ModelSerializer):
+    pictures = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Advertisement
+        fields = [
+            'lost_person_first_name', 'lost_person_second_name',
+            'pictures',
+            'description', 'latitude', 'longitude',
+            'location_data', 'date_lost', 'time_created',
+        ]
+
+    def get_pictures(self, instance):
+        adv_picture = instance.pictures.all()
+        return PictureSerializer(instance=adv_picture, many=True).data
