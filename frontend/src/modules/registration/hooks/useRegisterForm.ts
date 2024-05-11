@@ -1,14 +1,17 @@
 import { Resolver, useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { Errors, UserTypes } from '@constants';
+import { Errors } from '@constants';
 import { ICreateUserRequest } from '@app/services/users/types.ts';
+import { PhoneNumber } from '@constants/regexp.ts';
 
 const schema = yup.object().shape({
   first_name: yup.string().required(Errors.Required),
   last_name: yup.string().required(Errors.Required),
-  user_type: yup.string().required(Errors.Required),
-  email: yup.string().email(Errors.EmailInvalid).required(Errors.Required),
+  phone_number: yup
+    .string()
+    .required(Errors.Required)
+    .test('phone', Errors.PhoneInvalid, (value) => PhoneNumber.test(value)),
   password: yup.string().required(Errors.Required),
   password_2: yup
     .string()
@@ -25,8 +28,7 @@ const useRegisterForm = () => {
     defaultValues: {
       first_name: '',
       last_name: '',
-      user_type: UserTypes.Volunteer,
-      email: '',
+      phone_number: '',
       password: '',
       password_2: '',
     },

@@ -16,7 +16,7 @@ const AuthGuard: FC<Props> = ({ children, shouldBeLogged = true }) => {
     return <>{children}</>;
   }
 
-  return <Navigate to={accessToken ? Routes.Advertisements : Routes.Login} />;
+  return <Navigate to={accessToken ? Routes.Profile : Routes.Login} />;
 };
 
 export default AuthGuard;

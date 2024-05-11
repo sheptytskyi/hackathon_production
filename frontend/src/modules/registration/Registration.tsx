@@ -1,21 +1,11 @@
 import { FC } from 'react';
 import { FormProvider } from 'react-hook-form';
-import {
-  Centered,
-  ControlledRadioGroup,
-  ControlledTextField,
-  TextLink,
-} from '@ui';
+import { Centered, ControlledTextField, TextLink } from '@ui';
 import { Box, Button, Stack, Typography } from '@mui/material';
-import { APP_TITLE, UserTypes } from '@constants';
+import { APP_TITLE } from '@constants';
 import { Routes } from '@router';
 import useRegisterForm from '@modules/registration/hooks/useRegisterForm.ts';
 import useCreateUser from '@modules/registration/hooks/useCreateUser.ts';
-
-const typeOptions = [
-  { value: UserTypes.MissedRelative, label: 'Мої рідні зникли' },
-  { value: UserTypes.Volunteer, label: 'Хочу допомогти знайти людей' },
-];
 
 const Registration: FC = () => {
   const { form } = useRegisterForm();
@@ -49,13 +39,10 @@ const Registration: FC = () => {
             />
           </Stack>
 
-          <ControlledTextField name="email" label="Email" />
-
-          <ControlledRadioGroup
-            row
-            name="user_type"
-            label="Ваша роль:"
-            options={typeOptions}
+          <ControlledTextField
+            name="phone_number"
+            label="Номер телефону"
+            placeholder="+380"
           />
         </Stack>
 

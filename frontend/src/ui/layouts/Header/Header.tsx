@@ -1,10 +1,12 @@
 import { FC } from 'react';
 import { Wrapper } from '@ui/layouts/Header/Header.styled';
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Button, Stack, Typography } from '@mui/material';
 import useNavButtons from '@ui/layouts/Header/hooks/useNavButtons.ts';
 import { Link, useLocation } from 'react-router-dom';
 import { APP_TITLE } from '@constants';
 import { Routes } from '@router';
+import UserProfile from '@ui/layouts/Header/components/UserProfile';
+import muiTheme from '@theme';
 
 const Header: FC = () => {
   const { pathname } = useLocation();
@@ -16,7 +18,12 @@ const Header: FC = () => {
         variant="h3"
         component={Link}
         to={Routes.Home}
-        sx={{ textDecoration: 'none' }}
+        sx={{
+          textDecoration: 'none',
+          [muiTheme.breakpoints.down('sm')]: {
+            display: 'none',
+          },
+        }}
       >
         {APP_TITLE}
       </Typography>
@@ -35,7 +42,7 @@ const Header: FC = () => {
         ))}
       </Stack>
 
-      <Box />
+      <UserProfile />
     </Wrapper>
   );
 };

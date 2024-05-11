@@ -2,7 +2,7 @@ import useProfile from '@hooks/useProfile.ts';
 import { Routes } from '@router';
 
 const guestNavButtons = [{ title: 'Увійти', to: Routes.Login }];
-const navButtons = [{ title: 'Головна', to: Routes.Home }];
+const navButtons = [{ title: 'Мапа оголошень', to: Routes.Home }];
 
 const useNavButtons = () => {
   const [{ isLogged }] = useProfile();

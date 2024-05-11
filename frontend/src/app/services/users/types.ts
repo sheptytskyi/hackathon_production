@@ -1,7 +1,5 @@
-import { UserTypes } from '@constants/entities/user.ts';
-
 export type ILoginRequest = {
-  email: string;
+  phone_number: string;
   password: string;
 };
 
@@ -13,8 +11,7 @@ export type ILoginResponse = {
 export type ICreateUserRequest = {
   first_name: string;
   last_name: string;
-  user_type: UserTypes;
-  email: string;
+  phone_number: string;
   password: string;
   password_2: string;
 };
@@ -22,7 +19,6 @@ export type ICreateUserRequest = {
 export interface IProfile {
   first_name: string;
   last_name: string;
-  email: string;
+  phone_number: string;
   date_joined: string;
-  user_type: UserTypes;
 }

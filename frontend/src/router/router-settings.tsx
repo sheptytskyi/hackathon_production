@@ -8,6 +8,7 @@ const Login = lazy(() => import('@modules/login'));
 const Registration = lazy(() => import('@modules/registration'));
 const Main = lazy(() => import('@modules/main'));
 const Home = lazy(() => import('@modules/home'));
+const Profile = lazy(() => import('@modules/my-profile'));
 
 const RouterSettings = createBrowserRouter([
   {
@@ -32,6 +33,14 @@ const RouterSettings = createBrowserRouter([
         element: (
           <AuthGuard shouldBeLogged={false}>
             <Registration />
+          </AuthGuard>
+        ),
+      },
+      {
+        path: Routes.Profile,
+        element: (
+          <AuthGuard shouldBeLogged>
+            <Profile />
           </AuthGuard>
         ),
       },
