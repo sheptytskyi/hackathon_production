@@ -15,11 +15,15 @@ const Login: FC = () => {
     <FormProvider {...form}>
       <Centered alignItems="flex-start">
         <Typography variant="h2" color="primary.main">
-          З поверненням!
+          Увійти
         </Typography>
 
         <Stack width="100%" pt={5} gap={4}>
-          <ControlledTextField name="email" label="E-mail" />
+          <ControlledTextField
+            name="phone_number"
+            label="Номер телефону"
+            placeholder="+380"
+          />
           <ControlledTextField name="password" label="Пароль" />
         </Stack>
 
