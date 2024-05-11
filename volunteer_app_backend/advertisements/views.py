@@ -1,10 +1,10 @@
 from rest_framework import status
-from rest_framework.generics import GenericAPIView, get_object_or_404, ListAPIView
+from rest_framework.generics import GenericAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
 
-from advertisements.serializers import AdvertisementCreateSerializer, AdvertisementListSerializer
+from advertisements.serializers import AdvertisementCreateSerializer, AdvertisementListSerializer, \
+    AdvertisementDeleteSerializer
 from advertisements.models import Advertisement, StatusChoices
 
 
@@ -19,6 +19,7 @@ class AdvertisementAPIView(GenericAPIView):
 
     def post(self, request):
         serializer = self.get_serializer(data=request.data, context={'request': request})
+
         if serializer.is_valid():
             serializer.save()
             return Response(status=status.HTTP_201_CREATED)

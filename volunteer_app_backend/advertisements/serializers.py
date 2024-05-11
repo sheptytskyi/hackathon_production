@@ -21,7 +21,6 @@ class AdvertisementCreateSerializer(serializers.Serializer):
     lost_person_first_name = serializers.CharField()
     lost_person_second_name = serializers.CharField()
     description = serializers.CharField(max_length=999)
-    location_data = serializers.CharField(max_length=200)
     latitude = serializers.FloatField()
     longitude = serializers.FloatField()
     date_lost = serializers.DateField()
@@ -63,10 +62,13 @@ class AdvertisementDeleteSerializer(serializers.Serializer):
 
     def destroy(self, validated_data):
         author = self.context['request'].user
-        advertisement = Advertisement.objects.filter(author=author).first()
-        advertisement.status = validated_data['status']
-        advertisement.save()
-        return advertisement
+
+        advertisement = Advertisement.objects.filter(author=author, status=StatusChoices.active).first()
+        if advertisement is not None:
+            advertisement.status = validated_data['status']
+            advertisement.save()
+            return advertisement
+        raise serializers.ValidationError("User has got no active advertisements.")
 
 
 class AdvertisementListSerializer(serializers.ModelSerializer):
