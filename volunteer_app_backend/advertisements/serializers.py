@@ -1,7 +1,7 @@
 from django.db import transaction
 from rest_framework import serializers
 
-from advertisements.models import Picture, Advertisement
+from advertisements.models import Picture, Advertisement, StatusChoices
 from advertisements.enums import WAR_AREA
 from services.location import get_location
 
@@ -55,6 +55,17 @@ class AdvertisementCreateSerializer(serializers.Serializer):
                 for picture_data in pictures_data
             ])
 
+        return advertisement
+
+
+class AdvertisementDeleteSerializer(serializers.Serializer):
+    status = serializers.ChoiceField(choices=StatusChoices)
+
+    def destroy(self, validated_data):
+        author = self.context['request'].user
+        advertisement = Advertisement.objects.filter(author=author).first()
+        advertisement.status = validated_data['status']
+        advertisement.save()
         return advertisement
 
 
