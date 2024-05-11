@@ -8,3 +8,4 @@ requests
 django-phonenumber-field
 phonenumbers
 Pillow
+python-dotenv

@@ -63,10 +63,13 @@ class AdvertisementDeleteSerializer(serializers.Serializer):
 
     def destroy(self, validated_data):
         author = self.context['request'].user
-        advertisement = Advertisement.objects.filter(author=author).first()
-        advertisement.status = validated_data['status']
-        advertisement.save()
-        return advertisement
+
+        advertisement = Advertisement.objects.filter(author=author, status=StatusChoices.active).first()
+        if advertisement is not None:
+            advertisement.status = validated_data['status']
+            advertisement.save()
+            return advertisement
+        raise serializers.ValidationError("User has got no active advertisements.")
 
 
 class AdvertisementListSerializer(serializers.ModelSerializer):
