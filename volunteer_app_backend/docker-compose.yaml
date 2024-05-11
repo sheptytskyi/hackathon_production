@@ -1,0 +1,33 @@
+version: "3.11"
+
+services:
+  volunteer_app:
+    build: .
+    volumes:
+      - .:/volunteer_app_backend
+    ports:
+      - 8080:8080
+    env_file:
+      - .env
+    command: >
+      sh -c "python manage.py makemigrations \
+      && python manage.py migrate \
+      && python manage.py collectstatic --noinput \
+      && python manage.py runserver 0.0.0.0:8080"
+    depends_on:
+      - volunteer_app_db
+
+  volunteer_app_db:
+    image: postgres:14.6-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - .env
+    ports:
+      - 5432:5432
+    expose:
+      - 5432
+
+
+volumes:
+  postgres_data:
