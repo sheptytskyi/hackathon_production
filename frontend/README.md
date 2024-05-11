@@ -1,7 +1,6 @@
 # Hackaton Test Task [Frontend]
 
-This is a test task for the hackaton. The task is to create a mvp of a simple web application that allows people to create advertisements about their needs. There should be 2 roles: donater and reciever. Reciever can create an advertisement about his needs and donater can see the list of advertisements and choose one to fulfill.
-
+This is a test task for the hackaton. 
 ---
 ### How tu run the project:
 
