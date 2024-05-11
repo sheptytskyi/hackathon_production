@@ -1,11 +1,11 @@
 from rest_framework import status
-from rest_framework.generics import GenericAPIView, get_object_or_404
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import GenericAPIView, get_object_or_404, ListAPIView
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
+from advertisements.serializers import AdvertisementCreateSerializer, AdvertisementListSerializer
 from advertisements.models import Advertisement, StatusChoices
-from advertisements.serializers import AdvertisementCreateSerializer, AdvertisementDeleteSerializer
 
 
 class AdvertisementAPIView(GenericAPIView):
@@ -31,3 +31,19 @@ class AdvertisementAPIView(GenericAPIView):
             return Response({'advertisement_id': adv.id}, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class MyAdvertisementView(GenericAPIView):
+    serializer_class = AdvertisementCreateSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        advertisement = Advertisement.objects.filter(author_id=request.user.id).first()
+        serializer = self.get_serializer(instance=advertisement)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+      
+class AdvertisementGetAllAPIView(ListAPIView):
+    permission_classes = [AllowAny]
+    queryset = Advertisement.objects.filter(status=StatusChoices.active)
+    serializer_class = AdvertisementListSerializer
+    filterset_fields = ['lost_person_first_name', 'lost_person_second_name']

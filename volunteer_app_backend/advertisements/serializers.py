@@ -2,6 +2,8 @@ from django.db import transaction
 from rest_framework import serializers
 
 from advertisements.models import Picture, Advertisement, StatusChoices
+from advertisements.enums import WAR_AREA
+from services.location import get_location
 
 
 class PictureSerializer(serializers.ModelSerializer):
@@ -19,6 +21,7 @@ class AdvertisementCreateSerializer(serializers.Serializer):
     lost_person_first_name = serializers.CharField()
     lost_person_second_name = serializers.CharField()
     description = serializers.CharField(max_length=999)
+    location_data = serializers.CharField(max_length=200)
     latitude = serializers.FloatField()
     longitude = serializers.FloatField()
     date_lost = serializers.DateField()
@@ -33,11 +36,19 @@ class AdvertisementCreateSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         pictures_data = validated_data.pop('picture', None)
+        location_data = get_location(validated_data["latitude"], validated_data["longitude"])
+
+        if location_data not in WAR_AREA:
+            raise serializers.ValidationError("This area is not available.")
 
         author = self.context['request'].user
 
         with transaction.atomic():
-            advertisement = Advertisement.objects.create(author=author, **validated_data)
+            advertisement = Advertisement.objects.create(
+                author=author,
+                location_data=f"{location_data.state}" + f", {location_data.district}" if location_data.district else None,
+                **validated_data
+            )
 
             Picture.objects.bulk_create([
                 Picture(advertisement=advertisement, picture=picture_data)
@@ -58,3 +69,18 @@ class AdvertisementDeleteSerializer(serializers.Serializer):
         return advertisement
 
 
+class AdvertisementListSerializer(serializers.ModelSerializer):
+    pictures = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Advertisement
+        fields = [
+            'lost_person_first_name', 'lost_person_second_name',
+            'pictures',
+            'description', 'latitude', 'longitude',
+            'location_data', 'date_lost', 'time_created',
+        ]
+
+    def get_pictures(self, instance):
+        adv_picture = instance.pictures.all()
+        return PictureSerializer(instance=adv_picture, many=True).data
