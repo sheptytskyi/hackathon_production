@@ -7,6 +7,7 @@ from advertisements.serializers import AdvertisementCreateSerializer, Advertisem
 from advertisements.models import Advertisement, StatusChoices
 
 
+
 class AdvertisementCreateAPIView(GenericAPIView):
     serializer_class = AdvertisementCreateSerializer
     permission_classes = [IsAuthenticated]
@@ -19,6 +20,16 @@ class AdvertisementCreateAPIView(GenericAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class MyAdvertisementView(GenericAPIView):
+    serializer_class = AdvertisementCreateSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        advertisement = Advertisement.objects.filter(author_id=request.user.id).first()
+        serializer = self.get_serializer(instance=advertisement)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+      
 class AdvertisementGetAllAPIView(ListAPIView):
     permission_classes = [AllowAny]
     queryset = Advertisement.objects.filter(status=StatusChoices.active)
