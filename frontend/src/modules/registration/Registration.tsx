@@ -13,8 +13,8 @@ import useRegisterForm from '@modules/registration/hooks/useRegisterForm.ts';
 import useCreateUser from '@modules/registration/hooks/useCreateUser.ts';
 
 const typeOptions = [
-  { value: UserTypes.MissedRelative, label: 'Донатер' },
-  { value: UserTypes.Volunteer, label: 'Отримувач' },
+  { value: UserTypes.MissedRelative, label: 'Мої рідні зникли' },
+  { value: UserTypes.Volunteer, label: 'Хочу допомогти знайти людей' },
 ];
 
 const Registration: FC = () => {
