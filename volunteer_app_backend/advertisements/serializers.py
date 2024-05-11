@@ -21,7 +21,6 @@ class AdvertisementCreateSerializer(serializers.Serializer):
     lost_person_first_name = serializers.CharField()
     lost_person_second_name = serializers.CharField()
     description = serializers.CharField(max_length=999)
-    location_data = serializers.CharField(max_length=200)
     latitude = serializers.FloatField()
     longitude = serializers.FloatField()
     date_lost = serializers.DateField()
