@@ -1,0 +1,9 @@
+django
+psycopg2-binary
+djangorestframework
+djangorestframework-simplejwt
+drf-spectacular
+django-filter
+requests
+django-phonenumber-field
+phonenumbers
