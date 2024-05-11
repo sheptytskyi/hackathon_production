@@ -5,7 +5,9 @@ services:
     build: .
     volumes:
       - .:/volunteer_app_backend
-    ports:
+      - static_volume:/volunteer_app_backend/static
+      - media_volume:/volunteer_app_backend/media
+    expose:
       - 8080:8080
     env_file:
       - .env
@@ -13,7 +15,7 @@ services:
       sh -c "python manage.py makemigrations \
       && python manage.py migrate \
       && python manage.py collectstatic --noinput \
-      && python manage.py runserver 0.0.0.0:8080"
+      && gunicorn core.wsgi:application --bind 0.0.0.0:8080"
     depends_on:
       - volunteer_app_db
 
@@ -28,6 +30,20 @@ services:
     expose:
       - 5432
 
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile-nginx
+    volumes:
+      - static_volume:/volunteer_app_backend/static
+      - media_volume:/volunteer_app_backend/media
+    ports:
+      - 1337:80
+    depends_on:
+      - volunteer_app
+
 
 volumes:
   postgres_data:
+  static_volume:
+  media_volume:
