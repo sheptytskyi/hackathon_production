@@ -1,7 +1,7 @@
 from django.db import transaction
 from rest_framework import serializers
 
-from advertisements.models import Picture, Advertisement
+from advertisements.models import Picture, Advertisement, StatusChoices
 
 
 class PictureSerializer(serializers.ModelSerializer):
@@ -45,3 +45,16 @@ class AdvertisementCreateSerializer(serializers.Serializer):
             ])
 
         return advertisement
+
+
+class AdvertisementDeleteSerializer(serializers.Serializer):
+    status = serializers.ChoiceField(choices=StatusChoices)
+
+    def destroy(self, validated_data):
+        author = self.context['request'].user
+        advertisement = Advertisement.objects.filter(author=author).first()
+        advertisement.status = validated_data['status']
+        advertisement.save()
+        return advertisement
+
+
