@@ -7,3 +7,4 @@ django-filter
 requests
 django-phonenumber-field
 phonenumbers
+Pillow
