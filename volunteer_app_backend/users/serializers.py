@@ -26,4 +26,9 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUserModel
         fields = ('phone_number', 'first_name', 'last_name', 'date_joined')
-        
+
+
+class UserContactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUserModel
+        fields = ('phone_number', 'first_name', 'last_name')

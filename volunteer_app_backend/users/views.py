@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 
-from .serializers import UserSerializer, UserProfileSerializer
+from .serializers import UserSerializer, UserProfileSerializer, UserContactSerializer
 
 
 class UserRegistrationAPIView(GenericAPIView):
@@ -18,6 +18,14 @@ class UserRegistrationAPIView(GenericAPIView):
 
 class UserProfileApiView(GenericAPIView):
     serializer_class = UserProfileSerializer
+
+    def get(self, request):
+        serializer = self.get_serializer(instance=request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UserContactApiView(GenericAPIView):
+    serializer_class = UserContactSerializer
 
     def get(self, request):
         serializer = self.get_serializer(instance=request.user)
